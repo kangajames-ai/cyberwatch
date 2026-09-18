@@ -120,7 +120,7 @@ class NetworkScanner:
         return open_ports
     
     # ============================================================
-    # THIS IS THE get_service_name METHOD YOU'RE LOOKING FOR
+    # get_service_name METHOD
     # ============================================================
     def get_service_name(self, port):
         """Get service name from port number"""

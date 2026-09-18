@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - CyberWatch</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background: #f0f2f5; }
+        .navbar { background: #1a1a2e; }
+        .navbar-brand { color: #00d4ff !important; font-weight: bold; }
+        .card { border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark">
+        <div class="container">
+            <span class="navbar-brand">
+                <i class="fas fa-shield-halved"></i> CyberWatch
+            </span>
+            <a href="{{ url_for('index') }}" class="btn btn-outline-light btn-sm">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5><i class="fas fa-history"></i> Scan History</h5>
+            </div>
+            <div class="card-body">
+                {% if history %}
+                    <div class="list-group">
+                        {% for scan in history %}
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <i class="fas fa-clock text-primary"></i>
+                                    <strong>{{ scan.timestamp }}</strong>
+                                </div>
+                                <div>
+                                    <span class="badge bg-primary">Devices: {{ scan.devices }}</span>
+                                    <button class="btn btn-sm btn-outline-primary" 
+                                            onclick="showDevices('{{ loop.index0 }}')">
+                                        <i class="fas fa-eye"></i> View
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="devices-{{ loop.index0 }}" style="display:none; margin-top: 10px;">
+                                <ul class="list-group">
+                                    {% for device in scan.devices_list %}
+                                    <li class="list-group-item small">
+                                        {{ device.ip }} - {{ device.vendor }}
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-file-alt fa-3x text-muted"></i>
+                        <p class="mt-2">No scan history yet. Run your first scan!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showDevices(index) {
+            const element = document.getElementById(`devices-${index}`);
+            if (element.style.display === 'none') {
+                element.style.display = 'block';
+            } else {
+                element.style.display = 'none';
+            }
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
